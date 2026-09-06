@@ -13,4 +13,6 @@ The canonical W09 analysis produces:
 - `objects/ANALYTIC_DATA.rds` — analytic object created after pre-UACR denominator verification and post-freeze UACR opening.
 - `provenance/sessionInfo.txt` and `runtime_fields.tsv` — execution environment evidence.
 
-The supplied code bundle did not include the exact W12 manuscript/table/figure mapping files. No manuscript-facing table or figure generator has therefore been invented in this release candidate.
+The exact W12 publication-facing mapping is documented in `docs/MANUSCRIPT_OUTPUT_MAP.csv`. That file links the manuscript's cohort counts, seven-category Table 1, principal T02 estimate, UACR availability and secondary findings, age/sex subgroup statements, five prespecified sensitivity analyses, identification bounds, and Figure 1 values to the accepted W09 machine-readable output rows.
+
+No separate manuscript-facing scientific computation layer has been invented: publication displays remain traceable to the frozen canonical result families above.
