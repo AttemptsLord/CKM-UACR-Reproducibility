@@ -12,10 +12,8 @@ The accepted W09 result CSVs were byte-identical across the original two runs. T
 
 The historical independent W10 audit used exact equality for counts/categories and a documented `<=1e-10` comparison tolerance for point estimates, CIs, and bounds. Those audit results are retained as evidence in `validation/reference/W10_ACCEPTED/`.
 
-## Current curation-session limitation
+## Current release-gate status
 
-The curation environment used to assemble this release candidate did not contain R. Therefore the newly cleaned wrappers could not be executed end-to-end here. The canonical scientific R files were instead checked by SHA256 against accepted W09, and the new source-input verifier was tested against the supplied frozen W04 XPT snapshot. An exact-runtime end-to-end run is a required manual release gate.
+The W12 manuscript title and publication-facing manuscript-output mapping have now been cross-checked and closed. `docs/MANUSCRIPT_OUTPUT_MAP.csv` traces the manuscript's cohort counts, Table 1 values, primary estimate, UACR availability and secondary findings, subgroup statements, all five sensitivity analyses, identification bounds, and Figure 1 values to the accepted W09 machine-readable result families.
 
-## W12 authority gap
-
-The exact W12 manuscript package was not present in the supplied code archive and was not retrievable as a file during this curation session. The user-provided W12 smoke checks are enforced, but the exact final manuscript title/table/figure mapping and any W12-specific result manifest still require direct cross-check before public release.
+The repository remains **private** pending one final gate: a fresh end-to-end run under the exact locked runtime (R 4.6.1, `survey` 4.5, `srvyr` 1.3.1, `foreign` 0.8-91, `LC_ALL=C`, `TZ=UTC`). The static release audit passed, the MIT License has been explicitly authorized, and the public-release metadata have been prepared.
