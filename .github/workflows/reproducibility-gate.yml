@@ -1,0 +1,77 @@
+name: CKM-UACR frozen reproducibility gate
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      TZ: UTC
+      LC_ALL: C
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Set up exact R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.6.1'
+          use-public-rspm: false
+
+      - name: Install locked R packages from date-frozen CRAN snapshot
+        shell: Rscript {0}
+        run: |
+          options(repos = c(CRAN = "https://packagemanager.posit.co/cran/2026-06-24"))
+          install.packages(c("survey", "srvyr"))
+          req <- c(survey="4.5", srvyr="1.3.1", foreign="0.8.91")
+          for (p in names(req)) {
+            if (!requireNamespace(p, quietly=TRUE)) stop("PACKAGE_MISSING_AFTER_INSTALL: ", p)
+            obs <- as.character(utils::packageVersion(p))
+            if (!identical(obs, unname(req[[p]]))) stop("PACKAGE_VERSION_MISMATCH_AFTER_INSTALL ", p, " expected=", req[[p]], " observed=", obs)
+          }
+
+      - name: Record exact environment
+        run: |
+          mkdir -p release_gate_logs
+          Rscript scripts/00_check_environment.R 2>&1 | tee release_gate_logs/00_check_environment.log
+          Rscript --version 2>&1 | tee release_gate_logs/Rscript_version.log
+          Rscript -e 'cat(R.version.string,"\n"); cat("survey=",as.character(packageVersion("survey")),"\n",sep=""); cat("srvyr=",as.character(packageVersion("srvyr")),"\n",sep=""); cat("foreign=",as.character(packageVersion("foreign")),"\n",sep=""); sessionInfo()' 2>&1 | tee release_gate_logs/package_versions_and_sessionInfo.log
+
+      - name: Run frozen analysis from official NHANES inputs
+        run: |
+          set -o pipefail
+          Rscript scripts/run_all.R --download 2>&1 | tee release_gate_logs/run_all.log
+          grep -F "CKM_UACR_RUN_ALL: PASS" release_gate_logs/run_all.log
+          grep -F "CKM_UACR_FROZEN_RESULT_VALIDATION: PASS denominator=1985 joint=1851 T02=10.3% CI=8.8%-12.0% bounds=9.7%-15.6% reference_tables=6" release_gate_logs/run_all.log
+
+      - name: Confirm byte equality of all six frozen result families
+        run: |
+          set -euo pipefail
+          for f in PRIMARY_RESULTS.csv SECONDARY_RESULTS.csv SUBGROUP_RESULTS.csv SENSITIVITY_RESULTS.csv MISSINGNESS_RESULTS.csv IDENTIFICATION_BOUNDS.csv; do
+            cmp --silent "outputs/current/$f" "validation/reference/W09_ACCEPTED/$f"
+            echo "$f: BYTE_IDENTICAL"
+          done | tee release_gate_logs/result_byte_equality.log
+          sha256sum outputs/current/*.csv release_gate_logs/* > release_gate_logs/SHA256SUMS.txt
+          git status --porcelain | tee release_gate_logs/git_status_after_run.txt
+
+      - name: Upload reproducibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ckm-uacr-release-gate-evidence
+          path: |
+            release_gate_logs/
+            outputs/current/
+          if-no-files-found: warn
