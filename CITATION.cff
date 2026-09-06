@@ -1,7 +1,16 @@
 cff-version: 1.2.0
-message: "Please cite the associated CKM-UACR manuscript. Final citation metadata must be synchronized to the frozen W12 manuscript before public release."
-title: "CKM-UACR reproducibility repository"
+message: "If you use this software, please cite this repository and the associated manuscript when published."
+title: "Incremental Kidney-Risk Information From UACR Among Adults Identified for Testing Under the 2026 Cardiovascular-Kidney-Metabolic Guideline: NHANES 2021-2023"
 type: software
 version: "1.0.0"
 authors:
-  - name: "AUTHOR METADATA REQUIRED BEFORE PUBLIC RELEASE"
+  - family-names: "Jaareh"
+    given-names: "Hamzah"
+    affiliation: "Independent Researcher"
+repository-code: "https://github.com/AttemptsLord/CKM-UACR-Reproducibility"
+keywords:
+  - UACR
+  - NHANES
+  - reproducibility
+  - kidney risk
+  - survey analysis
