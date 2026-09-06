@@ -1,0 +1,1 @@
+CKM_UACR_W10_RETURN_VALIDATOR: PASS version=1.0.0 status=PASS numerical=PASS red_team=PASS results_lock=PASS findings=10

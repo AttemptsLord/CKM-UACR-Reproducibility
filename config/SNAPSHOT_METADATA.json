@@ -1,0 +1,8 @@
+{
+  "snapshot_type": "CKM_UACR_W04_OFFICIAL_CDC_XPT",
+  "nhanes_cycle": "August 2021-August 2023",
+  "source_host": "wwwn.cdc.gov",
+  "file_count": 12,
+  "created_utc": "2026-09-05T22:42:12Z",
+  "provenance_policy": "canonical CDC/NCHS URLs only; no mirrors"
+}

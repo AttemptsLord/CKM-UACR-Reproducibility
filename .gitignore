@@ -1,0 +1,21 @@
+# Raw/public-source data are downloaded locally, not committed.
+data/raw/*
+!data/raw/.gitkeep
+
+# Generated analysis outputs and staging.
+outputs/current/
+work/*
+!work/.gitkeep
+
+# R/session/editor/OS artifacts.
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.DS_Store
+__MACOSX/
+._*
+
+# Temporary downloads.
+*.part
+*.tmp

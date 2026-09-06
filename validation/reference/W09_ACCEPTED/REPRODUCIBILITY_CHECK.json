@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "core_results_identical": true,
+  "runs": 2,
+  "objects": [
+    {
+      "object": "objects/ANALYTIC_DATA.rds",
+      "run1_sha256": "a991bce7f0e996b55944104a5e31e5b2383a667534457c630fba4d407f63d673",
+      "run2_sha256": "a991bce7f0e996b55944104a5e31e5b2383a667534457c630fba4d407f63d673",
+      "identical": true
+    },
+    {
+      "object": "PRIMARY_RESULTS.csv",
+      "run1_sha256": "a6d9c2509a938a5aceede3114a3a91d72a6f212233d207dc92ca62e57cb96c0e",
+      "run2_sha256": "a6d9c2509a938a5aceede3114a3a91d72a6f212233d207dc92ca62e57cb96c0e",
+      "identical": true
+    },
+    {
+      "object": "SECONDARY_RESULTS.csv",
+      "run1_sha256": "910bbac5be6f93d1048d07248a0be6942ba724e045c3ca58be7027b3a651f87f",
+      "run2_sha256": "910bbac5be6f93d1048d07248a0be6942ba724e045c3ca58be7027b3a651f87f",
+      "identical": true
+    },
+    {
+      "object": "SUBGROUP_RESULTS.csv",
+      "run1_sha256": "f293916d12cdb1b0c93b66a7c689a78df17f2807dbbc7bd68741e3a88fa52cf3",
+      "run2_sha256": "f293916d12cdb1b0c93b66a7c689a78df17f2807dbbc7bd68741e3a88fa52cf3",
+      "identical": true
+    },
+    {
+      "object": "SENSITIVITY_RESULTS.csv",
+      "run1_sha256": "2a41a600a81b3fc7cef6bdb04486746cda38b181572f225ebe83ffb9ec19e3c4",
+      "run2_sha256": "2a41a600a81b3fc7cef6bdb04486746cda38b181572f225ebe83ffb9ec19e3c4",
+      "identical": true
+    },
+    {
+      "object": "MISSINGNESS_RESULTS.csv",
+      "run1_sha256": "804a3d77a26e77046cb6095493801fe7a792389f79878c2930c170593ac4c70b",
+      "run2_sha256": "804a3d77a26e77046cb6095493801fe7a792389f79878c2930c170593ac4c70b",
+      "identical": true
+    },
+    {
+      "object": "IDENTIFICATION_BOUNDS.csv",
+      "run1_sha256": "8a5af3db0b131e5ac7295fef7d3072ac08d8d41095b9c13361b6e1aeb2674d04",
+      "run2_sha256": "8a5af3db0b131e5ac7295fef7d3072ac08d8d41095b9c13361b6e1aeb2674d04",
+      "identical": true
+    }
+  ]
+}

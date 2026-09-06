@@ -1,0 +1,7 @@
+cff-version: 1.2.0
+message: "Please cite the associated CKM-UACR manuscript. Final citation metadata must be synchronized to the frozen W12 manuscript before public release."
+title: "CKM-UACR reproducibility repository"
+type: software
+version: "1.0.0"
+authors:
+  - name: "AUTHOR METADATA REQUIRED BEFORE PUBLIC RELEASE"

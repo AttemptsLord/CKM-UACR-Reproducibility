@@ -1,0 +1,5 @@
+CKM_UACR_PUBLIC_RELEASE_STATIC_VALIDATOR: PASS inventory=949 sources=12 w10_fields=1492 identity=9 errors=0
+
+This static curation-session gate verifies required release files, forensic disposition coverage, canonical W09 code hashes, the 12-file W04 data freeze, exact frozen headline values, accepted W10 comparison/identity evidence, absence of raw XPTs, RESULT.json gate consistency, and privacy/security conditions.
+
+It does not substitute for the blocked exact-R end-to-end execution described in REPRODUCIBILITY_VALIDATION.md.

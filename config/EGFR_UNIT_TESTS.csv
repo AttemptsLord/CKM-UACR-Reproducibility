@@ -1,0 +1,9 @@
+test_id,scr_input,input_unit,scr_mg_dl_after_conversion,age_years,RIAGENDR,sex,expected_egfr_ml_min_1_73m2,absolute_tolerance,expected_status,purpose
+UT01_F_AT_KAPPA,0.7,mg/dL,0.700000000000,50,2,female,105.297601149144,1e-9,PASS_EXPECTED,female boundary ratio=1
+UT02_M_AT_KAPPA,0.9,mg/dL,0.900000000000,50,1,male,104.049012993225,1e-9,PASS_EXPECTED,male boundary ratio=1
+UT03_F_BELOW_KAPPA,0.5,mg/dL,0.500000000000,30,2,female,129.316959750666,1e-9,PASS_EXPECTED,female low-creatinine branch
+UT04_M_BELOW_KAPPA,0.7,mg/dL,0.700000000000,30,1,male,127.121715914985,1e-9,PASS_EXPECTED,male low-creatinine branch
+UT05_F_ABOVE_KAPPA,1.2,mg/dL,1.200000000000,70,2,female,48.696581892506,1e-9,PASS_EXPECTED,female high-creatinine branch
+UT06_M_ABOVE_KAPPA,1.5,mg/dL,1.500000000000,70,1,male,49.773629820505,1e-9,PASS_EXPECTED,male high-creatinine branch
+UT07_F_UMOL_CONVERSION,88.4,micromol/L,1.000000000000,40,2,female,73.037550783198,1e-9,PASS_EXPECTED,88.4 micromol/L -> 1.0 mg/dL
+UT08_M_UMOL_CONVERSION,106.08,micromol/L,1.200000000000,40,1,male,78.400991824767,1e-9,PASS_EXPECTED,106.08 micromol/L -> 1.2 mg/dL
