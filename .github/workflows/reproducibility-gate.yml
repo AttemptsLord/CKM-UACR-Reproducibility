@@ -10,7 +10,10 @@ permissions:
 
 jobs:
   reproduce:
-    runs-on: ubuntu-latest
+    # The accepted W09 reference files were produced on Apple Silicon macOS
+    # (aarch64-apple-darwin23, macOS Sequoia 15.6). Use the matching GitHub
+    # hosted arm64 macOS family for the exact byte-reproduction gate.
+    runs-on: macos-15
     timeout-minutes: 90
     env:
       TZ: UTC
@@ -30,6 +33,13 @@ jobs:
           r-version: '4.6.1'
           use-public-rspm: false
 
+      - name: Confirm Apple Silicon runner
+        run: |
+          mkdir -p release_gate_logs
+          uname -a | tee release_gate_logs/uname.log
+          sw_vers | tee release_gate_logs/sw_vers.log
+          test "$(uname -m)" = "arm64"
+
       - name: Install locked R packages from date-frozen CRAN snapshot
         shell: Rscript {0}
         run: |
@@ -44,7 +54,6 @@ jobs:
 
       - name: Record exact environment
         run: |
-          mkdir -p release_gate_logs
           Rscript scripts/00_check_environment.R 2>&1 | tee release_gate_logs/00_check_environment.log
           Rscript --version 2>&1 | tee release_gate_logs/Rscript_version.log
           Rscript -e 'cat(R.version.string,"\n"); cat("survey=",as.character(packageVersion("survey")),"\n",sep=""); cat("srvyr=",as.character(packageVersion("srvyr")),"\n",sep=""); cat("foreign=",as.character(packageVersion("foreign")),"\n",sep=""); sessionInfo()' 2>&1 | tee release_gate_logs/package_versions_and_sessionInfo.log
@@ -60,17 +69,17 @@ jobs:
         run: |
           set -euo pipefail
           for f in PRIMARY_RESULTS.csv SECONDARY_RESULTS.csv SUBGROUP_RESULTS.csv SENSITIVITY_RESULTS.csv MISSINGNESS_RESULTS.csv IDENTIFICATION_BOUNDS.csv; do
-            cmp --silent "outputs/current/$f" "validation/reference/W09_ACCEPTED/$f"
+            cmp -s "outputs/current/$f" "validation/reference/W09_ACCEPTED/$f"
             echo "$f: BYTE_IDENTICAL"
           done | tee release_gate_logs/result_byte_equality.log
-          sha256sum outputs/current/*.csv release_gate_logs/* > release_gate_logs/SHA256SUMS.txt
+          shasum -a 256 outputs/current/*.csv release_gate_logs/* > release_gate_logs/SHA256SUMS.txt
           git status --porcelain | tee release_gate_logs/git_status_after_run.txt
 
       - name: Upload reproducibility evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ckm-uacr-release-gate-evidence
+          name: ckm-uacr-release-gate-evidence-macos-arm64
           path: |
             release_gate_logs/
             outputs/current/
