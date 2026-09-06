@@ -64,4 +64,4 @@ The formal **exact byte-reproduction** release gate is therefore platform-locked
 
 ## Release status
 
-Static publication/security gates, title synchronization, manuscript-output mapping, authorized `CITATION.cff`, MIT licensing, and the exact-environment execution gate have all passed. **Public release has been authorized.** No scientific or reproducibility gate remains before public visibility; repository visibility is an account-level GitHub setting.
+Static publication/security gates, title synchronization, manuscript-output mapping, authorized `CITATION.cff`, MIT licensing, and the exact-environment execution gate have all passed. **Repository visibility is public.** The public release is available at `https://github.com/AttemptsLord/CKM-UACR-Reproducibility`.
