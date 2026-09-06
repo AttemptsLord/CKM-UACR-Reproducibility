@@ -1,91 +1,106 @@
-# CKM-UACR reproducibility repository
+# Incremental Kidney-Risk Information From UACR Among Adults Identified for Testing Under the 2026 Cardiovascular-Kidney-Metabolic Guideline: NHANES 2021-2023
 
-> **Release-candidate status:** the scientific implementation is curated from the accepted W09/W10 lineage without changing scientific code. Final public release remains blocked until the exact W12 manuscript package/title is cross-checked and this cleaned runner is executed under the locked R runtime.
-
-## Study title
-
-**[EXACT FROZEN W12 MANUSCRIPT TITLE REQUIRED BEFORE PUBLIC RELEASE]**
-
-The supplied code-curation archive did not contain the accepted W12 manuscript package. This release candidate therefore does not guess or promote an earlier working title as the final study title.
+This repository contains the reproducibility code and frozen computational references for the CKM-UACR analysis of NHANES August 2021-August 2023.
 
 ## Scientific objective
 
-This repository implements the frozen descriptive analysis of the incremental CKM/KDIGO kidney-risk information obtained after adding measured urine albumin-to-creatinine ratio (UACR) to a noncircular, pre-UACR guideline-defined testing-candidate population. It is a **guideline-implementation/information-yield analysis**, not a causal effectiveness analysis.
+The analysis estimates the incremental kidney-risk information obtained when measured urine albumin-to-creatinine ratio (UACR) is added after adults have already been identified for testing using prespecified pre-UACR information. It is a **descriptive guideline-implementation/information-yield analysis**, not a causal effectiveness analysis.
 
-A single UACR or eGFR measurement in NHANES does **not** establish chronic CKD. The repository must not be used to relabel one-time measurements as confirmed chronic disease.
+A single UACR or eGFR measurement in NHANES does **not** establish chronic CKD or persistent albuminuria. G/A categories in this project describe kidney-risk information observed at one survey visit.
 
-## Data source
+## Data source and public-data policy
 
-National Health and Nutrition Examination Survey (**NHANES August 2021-August 2023**), public-use CDC/NCHS files. Raw XPTs are not redistributed. Exact required filenames, official NCHS URLs, byte sizes, and SHA256s are frozen in `config/SOURCE_FILE_FREEZE.csv`.
+The source data are CDC/NCHS public-use files from **NHANES August 2021-August 2023**. Raw XPT files are not redistributed or committed. `data/README.md` and `config/SOURCE_FILE_FREEZE.csv` identify the exact 12 official NCHS files, URLs, byte sizes, and SHA256 hashes required for reproduction.
 
 ## Locked software environment
 
-- R **4.6.1**
-- `survey` **4.5**
-- `srvyr` **1.3.1**
-- `foreign` **0.8-91** (XPT import only)
-- `LC_ALL=C`, `TZ=UTC`
+Frozen-result reproduction requires exactly:
+
+- R 4.6.1
+- `survey` 4.5
+- `srvyr` 1.3.1
+- `foreign` 0.8-91 (XPT import only)
+- `LC_ALL=C`
+- `TZ=UTC`
 - `survey.lonely.psu="fail"`
 - `survey.adjust.domain.lonely=FALSE`
-- Python 3 standard library for download/SHA256 verification
+- Python 3 standard library for source-file download/SHA256 verification
 
-See `requirements/` for the accepted runtime record. Package substitutions are not allowed for a frozen-result reproduction run.
+Package or estimator substitutions are not accepted as an exact reproduction. See `requirements/` for the accepted runtime record.
 
-## Why the analysis is not split into many rewritten scripts
+## Repository structure
 
-The accepted W09 scientific implementation is one production script plus five frozen helper modules. Splitting that script into new variable/cohort/primary/secondary files would create unnecessary scientific-drift risk. Therefore `R/canonical/w09_analysis.R` and its helper files are copied **byte-for-byte** from the accepted W09 return. Public-facing wrappers handle only paths, data acquisition, staging, execution, and validation.
+- `R/canonical/` — byte-identical accepted W09 scientific code.
+- `scripts/` — environment, official-data acquisition/verification, staging, execution, and frozen-output validation wrappers.
+- `config/` — source freeze, frozen denominator membership, unit-test vectors, project state, and execution configuration.
+- `data/raw/` — local ignored location for the 12 NHANES XPT files.
+- `outputs/current/` — generated ignored outputs from a reproduction run.
+- `validation/reference/W09_ACCEPTED/` — accepted frozen machine-readable result tables used for byte-level validation.
+- `validation/reference/W10_ACCEPTED/` — accepted independent red-team validation evidence.
+- `tests/` — protocol/unit tests and frozen-result validation entrypoints.
+- `provenance/` — canonical-code hashes and behavior-preserving curation history.
+- `docs/` — workflow, reproducibility notes, and the publication-facing manuscript-output map after the release-gate patch is applied.
+
+The accepted W09 scientific implementation remains one production script plus five helper modules. It was deliberately not split into cosmetically cleaner scientific modules because doing so would add unnecessary risk of changing a frozen estimand, domain, factor level, missingness rule, or reliability decision.
 
 ## Reproduction
 
-From the repository root:
+From a clean checkout at the released commit, first verify the exact environment:
 
 ```bash
 Rscript scripts/00_check_environment.R
+```
+
+Then download the exact official source files, verify them, execute all tests/analysis steps, and validate frozen outputs:
+
+```bash
 Rscript scripts/run_all.R --download
 ```
 
-If the 12 verified XPT files are already in `data/raw/`, omit `--download`:
+If the 12 hash-verified XPTs are already present in `data/raw/`, run:
 
 ```bash
 Rscript scripts/run_all.R
 ```
 
-The run fails loudly if the environment, source files, frozen denominator, canonical analysis, unit tests, or output validation does not match the lock.
+The workflow exits nonzero on an environment mismatch, missing or hash-mismatched source file, denominator mismatch, test failure, result mismatch, or reliability-hierarchy mismatch.
 
-## Expected frozen smoke checks
+## Frozen headline checks
 
-- pre-UACR main denominator: **n = 1,985**
-- jointly analyzable primary population: **n = 1,851**
-- primary T02 estimate: **10.3%**
-- primary 95% CI: **8.8%-12.0%**
-- locked T02 missingness identification bounds: **9.7%-15.6%**
+The exact machine-readable reference files control. Rounded publication values are smoke checks only:
 
-These rounded values are smoke checks only. Exact machine-readable values in `validation/reference/W09_ACCEPTED/` control the release validator; discrepancies are not repaired by rounding.
+- pre-UACR eligible denominator: **n = 1,985**
+- jointly analyzable population: **n = 1,851**
+- principal T02 estimate: **10.3%**
+- principal T02 95% CI: **8.8%-12.0%**
+- T02 missingness identification bounds: **9.7%-15.6%**
 
-## Repository map
+No discrepancy may be hidden through rounding.
 
-- `R/canonical/` — untouched accepted W09 scientific code.
-- `scripts/` — public wrappers for environment, official-data verification/download, staging, execution, and frozen-result validation.
-- `config/` — frozen denominator, authorization state, data hashes/URLs, unit-test vectors, and non-scientific path/validation configuration.
-- `validation/reference/W09_ACCEPTED/` — accepted result tables used for byte-level validation.
-- `validation/reference/W10_ACCEPTED/` — independent red-team evidence; the accepted W10 v1.0.3 run independently reconstructed the analysis before comparison.
-- `tests/` — synthetic eGFR/transition tests and frozen-result validation entrypoint.
-- `provenance/` — canonical code hashes and behavior-preserving cleaning history; the full curator forensic ledger is retained outside the GitHub tree.
-- `data/raw/` — local, ignored XPT inputs.
-- `outputs/current/` — generated, ignored analysis outputs.
+## Expected outputs and manuscript provenance
 
-## Output-to-manuscript relationship
+`outputs/current/` contains `PRIMARY_RESULTS.csv`, `SECONDARY_RESULTS.csv`, `SUBGROUP_RESULTS.csv`, `SENSITIVITY_RESULTS.csv`, `MISSINGNESS_RESULTS.csv`, and `IDENTIFICATION_BOUNDS.csv`, plus the analytic object and runtime provenance generated by the accepted W09 pipeline.
 
-`PRIMARY_RESULTS.csv`, `SECONDARY_RESULTS.csv`, `SUBGROUP_RESULTS.csv`, `SENSITIVITY_RESULTS.csv`, `MISSINGNESS_RESULTS.csv`, and `IDENTIFICATION_BOUNDS.csv` are the accepted computational result families. The exact W12 reader-facing table/figure mapping was not present in the supplied code-curation bundle, so this repository does not invent a manuscript table or figure layer.
+The release-gate `MANUSCRIPT_OUTPUT_MAP.csv` traces the manuscript's cohort counts, seven-category Table 1, principal estimate, UACR availability and secondary results, prespecified age/sex subgroup statements, all five sensitivity analyses, missingness bounds, and Figure 1 values to exact machine-readable W09 rows. For the public repository it should be added as `docs/MANUSCRIPT_OUTPUT_MAP.csv` without changing scientific code.
+
+Reliability actions remain part of the frozen outputs. Context-only or unreliable estimates must not be promoted beyond the W12 manuscript hierarchy.
+
+## Interpretation
+
+This repository reproduces a cross-sectional descriptive analysis of guideline implementation and information yield. It does not estimate the causal benefit of UACR testing, diagnose chronic CKD from a single visit, establish persistent albuminuria, determine complete individual treatment eligibility, or demonstrate undertreatment.
 
 ## Citation
 
-`CITATION.cff` is included as a release-candidate placeholder. Replace its author/title citation fields with the exact frozen W12 manuscript metadata before public publication. No DOI or GitHub account is assumed.
+A CFF 1.2.0 proposal using authorized public metadata is supplied by the public-release gate. No manuscript DOI or ORCID is asserted because neither is authorized/supplied in the controlling metadata.
 
 ## License
 
-No public software license was supplied with the source bundle. `LICENSE` therefore preserves all rights pending an explicit license choice; select a public license before publishing this repository.
+This repository is licensed under the **MIT License**. See `LICENSE`.
+
+## Funding and conflicts
+
+Funding/support: None. Conflicts of interest: None declared.
 
 ## Contact
 
-No public contact address is included in this release candidate.
+No public contact email is authorized for this repository.
